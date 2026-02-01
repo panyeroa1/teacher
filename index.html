@@ -249,13 +249,60 @@
                 <!-- Header/Logo -->
                 <div class="flex-1 flex flex-col items-center justify-center space-y-6 animate-slide-up">
                     <div class="relative w-28 h-28">
-                        <!-- Icon per reference (red outline style) -->
                         <div class="relative w-full h-full flex items-center justify-center">
-                            <i class="fa-solid fa-chalkboard-user text-6xl text-red-500/80 drop-shadow-sm"></i>
                             <div
-                                class="absolute -right-2 -top-2 bg-red-50 text-red-500 text-[10px] font-bold px-1.5 py-0.5 rounded-md border border-red-100">
-                                1.0</div>
+                                class="w-24 h-24 rounded-3xl bg-white/80 border border-white/80 shadow-xl shadow-blue-500/10 flex items-center justify-center">
+                                <img src="pwa_icon.png" alt="Succes Class" class="w-20 h-20 rounded-2xl object-contain">
+                            </div>
+                            <div
+                                class="absolute -right-2 -top-2 bg-emerald-50 text-emerald-600 text-[10px] font-bold px-1.5 py-0.5 rounded-md border border-emerald-100">
+                                verified</div>
                         </div>
+                    </div>
+                </div>
+
+                <!-- Permissions Status -->
+                <div class="w-full mb-6 animate-slide-up" style="animation-delay: 0.08s;">
+                    <div class="glass-panel rounded-2xl p-4 border border-white/70">
+                        <div class="flex items-center justify-between mb-3">
+                            <div>
+                                <p class="text-[10px] font-black uppercase tracking-widest text-gray-400">Permissions
+                                </p>
+                                <p class="text-sm font-semibold text-gray-700">Ready to start</p>
+                            </div>
+                            <button onclick="App.requestPermissions()"
+                                class="px-3 py-1.5 rounded-full text-[10px] font-bold bg-blue-600 text-white shadow-sm shadow-blue-500/20 hover:bg-blue-700 transition-all">
+                                Enable
+                            </button>
+                        </div>
+                        <div class="grid grid-cols-3 gap-3 text-center">
+                            <div class="bg-white/80 rounded-xl p-3 border border-gray-100">
+                                <div class="text-lg text-gray-500">
+                                    <i class="fa-solid fa-microphone"></i>
+                                </div>
+                                <div class="text-[10px] font-bold text-gray-500 mt-1">Microphone</div>
+                                <div id="perm-mic" class="text-[9px] font-black uppercase text-amber-500">required
+                                </div>
+                            </div>
+                            <div class="bg-white/80 rounded-xl p-3 border border-gray-100">
+                                <div class="text-lg text-gray-500">
+                                    <i class="fa-solid fa-bell"></i>
+                                </div>
+                                <div class="text-[10px] font-bold text-gray-500 mt-1">Notifications</div>
+                                <div id="perm-notifications" class="text-[9px] font-black uppercase text-amber-500">
+                                    required</div>
+                            </div>
+                            <div class="bg-white/80 rounded-xl p-3 border border-gray-100">
+                                <div class="text-lg text-gray-500">
+                                    <i class="fa-solid fa-battery-full"></i>
+                                </div>
+                                <div class="text-[10px] font-bold text-gray-500 mt-1">Wake Lock</div>
+                                <div id="perm-wakelock" class="text-[9px] font-black uppercase text-amber-500">required
+                                </div>
+                            </div>
+                        </div>
+                        <p class="text-[10px] text-gray-400 mt-3">Permissions are verified on device and stored locally.
+                        </p>
                     </div>
                 </div>
 
@@ -480,7 +527,7 @@
                                 <i class="fa-regular fa-copy text-[10px] text-gray-400"></i>
                             </div>
                         </div>
-                        <button onclick="App.shareRoom()"
+                        <button onclick="App.shareRoom()" title="Share Room"
                             class="w-8 h-8 rounded-full bg-gray-50 flex items-center justify-center text-gray-400 hover:text-blue-500 transition-colors">
                             <i class="fa-solid fa-share-nodes text-xs"></i>
                         </button>
@@ -558,7 +605,7 @@
                                     onkeydown="if(event.key === 'Enter') App.generateAIContent(this.value)">
                                 <i
                                     class="fa-solid fa-wand-magic-sparkles absolute left-3 top-1/2 -translate-y-1/2 text-purple-400 text-xs"></i>
-                                <button onclick="App.toggleMagicInput()"
+                                <button onclick="App.toggleMagicInput()" title="Close Magic Input"
                                     class="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600">
                                     <i class="fa-solid fa-xmark text-xs"></i>
                                 </button>
@@ -720,7 +767,7 @@
                             <p class="text-xs text-gray-500 mt-1 font-bold uppercase tracking-widest">Session Archive
                             </p>
                         </div>
-                        <button onclick="App.toggleModal('history')"
+                        <button onclick="App.toggleModal('history')" title="Close History"
                             class="w-10 h-10 rounded-full bg-white border border-gray-200 flex items-center justify-center text-gray-500 hover:text-gray-900 shadow-sm transition-all active:scale-95">
                             <i class="fa-solid fa-xmark"></i>
                         </button>
@@ -750,8 +797,8 @@
                 <div class="bg-white rounded-t-[2.5rem] md:rounded-[2.5rem] shadow-2xl p-8 text-center">
                     <!-- App Icon -->
                     <div
-                        class="w-24 h-24 bg-blue-600 rounded-3xl mx-auto mb-6 flex items-center justify-center text-white text-5xl shadow-xl shadow-blue-500/20 animate-bounce-slow">
-                        <i class="fa-solid fa-graduation-cap"></i>
+                        class="w-24 h-24 bg-blue-600/10 rounded-3xl mx-auto mb-6 flex items-center justify-center text-white text-5xl shadow-xl shadow-blue-500/20 animate-bounce-slow">
+                        <img src="pwa_icon.png" alt="Succes Class" class="w-20 h-20 rounded-2xl object-contain">
                     </div>
 
                     <h3 class="text-2xl font-black text-gray-900 mb-2">Install Success App</h3>
@@ -824,47 +871,111 @@
                 "fr": "5c3c89e5-535f-43ef-b14d-f8ffe148c1f0", // French Narrator Man
                 "de": "db229dfe-f5de-4be4-91fd-7b077c158578", // German Storyteller Man
                 "es": "a67e0421-22e0-4d5b-b586-bd4a64aee41d", // Spanish Narrator Man
-                "tl": "c4cbcb7d-d9fa-4eac-b547-46831718ef58", // Tagalog
+                "tl": "4b7f7e2f-9b36-429d-89b9-73685d4dd0b4", // Tagalog
                 "zh": "eda5bbff-1ff1-4886-8ef1-4e69a77640a0", // Chinese Commercial Man
                 "ja": "e8a863c6-22c7-4671-86ca-91cacffc038d", // Japanese Male
                 "hi": "638efaaa-4d0c-442e-b701-3fae16aad012", // Indian Man
                 "it": "408daed0-c597-4c27-aae8-fa04977640a0", // Italian Calm Man
                 "ko": "57dba6ff-fe3b-479d-836e-06f5a61cb5de", // Korean Narrator Man
                 "nl": "4aa74047-d005-4463-ba2e-a0d9b261fb87", // Dutch Man
+                "nl-BE": "005af375-5aad-4c02-9551-7fc411430542", // Flemish Male
                 "pl": "3d335974-4c4a-400a-84dc-ebf4b73aada6", // Polish Confident Man
                 "ru": "2b3bb17d-26b9-421f-b8ca-1dd92332279f", // Russian Narrator Man 1
                 "sv": "38a146c3-69d7-40ad-aada-76d5a2621758", // Swedish Narrator Man
                 "tr": "5a31e4fb-f823-4359-aa91-82c0ae9a991c", // Turkish Narrator Man
-                "tr": "5a31e4fb-f823-4359-aa91-82c0ae9a991c", // Turkish Narrator Man
-                "bg": "b043dea0-a007-4bbe-a708-769dc0d0c569", // Wise Man
-                "ro": "b043dea0-a007-4bbe-a708-769dc0d0c569", // Wise Man
-                "ar": "b043dea0-a007-4bbe-a708-769dc0d0c569", // Wise Man
-                "cs": "b043dea0-a007-4bbe-a708-769dc0d0c569", // Wise Man
-                "el": "b043dea0-a007-4bbe-a708-769dc0d0c569", // Wise Man
-                "fi": "b043dea0-a007-4bbe-a708-769dc0d0c569", // Wise Man
-                "hr": "b043dea0-a007-4bbe-a708-769dc0d0c569", // Wise Man
-                "ms": "b043dea0-a007-4bbe-a708-769dc0d0c569", // Wise Man
-                "sk": "b043dea0-a007-4bbe-a708-769dc0d0c569", // Wise Man
-                "da": "b043dea0-a007-4bbe-a708-769dc0d0c569", // Wise Man
-                "ta": "638efaaa-4d0c-442e-b701-3fae16aad012", // Indian Man
-                "uk": "05ffab9c-d380-4909-8375-cd12f59238c3", // Ukrainian Male (User)
-                "hu": "b043dea0-a007-4bbe-a708-769dc0d0c569", // Wise Man
-                "no": "b043dea0-a007-4bbe-a708-769dc0d0c569", // Wise Man
-                "vi": "b043dea0-a007-4bbe-a708-769dc0d0c569", // Wise Man
-                "bn": "638efaaa-4d0c-442e-b701-3fae16aad012", // Indian Man
-                "th": "b043dea0-a007-4bbe-a708-769dc0d0c569", // Wise Man
-                "he": "b043dea0-a007-4bbe-a708-769dc0d0c569", // Wise Man
-                "ka": "b043dea0-a007-4bbe-a708-769dc0d0c569", // Wise Man
-                "id": "b043dea0-a007-4bbe-a708-769dc0d0c569", // Wise Man
-                "te": "638efaaa-4d0c-442e-b701-3fae16aad012", // Indian Man
-                "gu": "638efaaa-4d0c-442e-b701-3fae16aad012", // Indian Man
-                "tl": "c4cbcb7d-d9fa-4eac-b547-46831718ef58", // Filipino (Tagalog) - User Provided
-                "fil": "c4cbcb7d-d9fa-4eac-b547-46831718ef58", // Filipino (Alias)
-                "kn": "638efaaa-4d0c-442e-b701-3fae16aad012", // Indian Man
-                "ml": "638efaaa-4d0c-442e-b701-3fae16aad012", // Indian Man
-                "mr": "638efaaa-4d0c-442e-b701-3fae16aad012", // Indian Man
-                "pa": "638efaaa-4d0c-442e-b701-3fae16aad012", // Indian Man
-                "nl-BE": "005af375-5aad-4c02-9551-7fc411430542", // Flemish Male (User)
+                "pt": "b043dea0-a007-4bbe-a708-769dc0d0c569", // Portuguese (Wise Man fallback)
+                "ta": "638efaaa-4d0c-442e-b701-3fae16aad012", // Tamil (Indian Man fallback)
+                "te": "638efaaa-4d0c-442e-b701-3fae16aad012", // Telugu (Indian Man fallback)
+                "gu": "638efaaa-4d0c-442e-b701-3fae16aad012", // Gujarati (Indian Man fallback)
+                "kn": "638efaaa-4d0c-442e-b701-3fae16aad012", // Kannada (Indian Man fallback)
+                "ml": "638efaaa-4d0c-442e-b701-3fae16aad012", // Malayalam (Indian Man fallback)
+                "mr": "638efaaa-4d0c-442e-b701-3fae16aad012", // Marathi (Indian Man fallback)
+                "pa": "638efaaa-4d0c-442e-b701-3fae16aad012", // Punjabi (Indian Man fallback)
+                "bn": "638efaaa-4d0c-442e-b701-3fae16aad012", // Bengali (Indian Man fallback)
+                "zh-TW": "eda5bbff-1ff1-4886-8ef1-4e69a77640a0", // Chinese Traditional (Same as Simplified)
+                "uk": "05ffab9c-d380-4909-8375-cd12f59238c3", // Ukrainian Male
+
+                // === GENERIC FALLBACKS FOR ALL OTHER LANGUAGES (Wise Man) ===
+                "af": "b043dea0-a007-4bbe-a708-769dc0d0c569",
+                "sq": "b043dea0-a007-4bbe-a708-769dc0d0c569",
+                "am": "b043dea0-a007-4bbe-a708-769dc0d0c569",
+                "ar": "b043dea0-a007-4bbe-a708-769dc0d0c569",
+                "hy": "b043dea0-a007-4bbe-a708-769dc0d0c569",
+                "az": "b043dea0-a007-4bbe-a708-769dc0d0c569",
+                "eu": "b043dea0-a007-4bbe-a708-769dc0d0c569",
+                "be": "b043dea0-a007-4bbe-a708-769dc0d0c569",
+                "bs": "b043dea0-a007-4bbe-a708-769dc0d0c569",
+                "bg": "b043dea0-a007-4bbe-a708-769dc0d0c569",
+                "ca": "b043dea0-a007-4bbe-a708-769dc0d0c569",
+                "ceb": "b043dea0-a007-4bbe-a708-769dc0d0c569",
+                "ny": "b043dea0-a007-4bbe-a708-769dc0d0c569",
+                "co": "b043dea0-a007-4bbe-a708-769dc0d0c569",
+                "hr": "b043dea0-a007-4bbe-a708-769dc0d0c569",
+                "cs": "b043dea0-a007-4bbe-a708-769dc0d0c569",
+                "da": "b043dea0-a007-4bbe-a708-769dc0d0c569",
+                "eo": "b043dea0-a007-4bbe-a708-769dc0d0c569",
+                "et": "b043dea0-a007-4bbe-a708-769dc0d0c569",
+                "fil": "c4cbcb7d-d9fa-4eac-b547-46831718ef58", // Filipino (Tagalog)
+                "fi": "b043dea0-a007-4bbe-a708-769dc0d0c569",
+                "fy": "b043dea0-a007-4bbe-a708-769dc0d0c569",
+                "gl": "b043dea0-a007-4bbe-a708-769dc0d0c569",
+                "ka": "b043dea0-a007-4bbe-a708-769dc0d0c569",
+                "el": "b043dea0-a007-4bbe-a708-769dc0d0c569",
+                "ht": "b043dea0-a007-4bbe-a708-769dc0d0c569",
+                "ha": "b043dea0-a007-4bbe-a708-769dc0d0c569",
+                "haw": "b043dea0-a007-4bbe-a708-769dc0d0c569",
+                "he": "b043dea0-a007-4bbe-a708-769dc0d0c569",
+                "hmn": "b043dea0-a007-4bbe-a708-769dc0d0c569",
+                "hu": "b043dea0-a007-4bbe-a708-769dc0d0c569",
+                "is": "b043dea0-a007-4bbe-a708-769dc0d0c569",
+                "ig": "b043dea0-a007-4bbe-a708-769dc0d0c569",
+                "id": "b043dea0-a007-4bbe-a708-769dc0d0c569",
+                "ga": "b043dea0-a007-4bbe-a708-769dc0d0c569",
+                "jw": "b043dea0-a007-4bbe-a708-769dc0d0c569",
+                "kk": "b043dea0-a007-4bbe-a708-769dc0d0c569",
+                "km": "b043dea0-a007-4bbe-a708-769dc0d0c569",
+                "ku": "b043dea0-a007-4bbe-a708-769dc0d0c569",
+                "ky": "b043dea0-a007-4bbe-a708-769dc0d0c569",
+                "lo": "b043dea0-a007-4bbe-a708-769dc0d0c569",
+                "la": "b043dea0-a007-4bbe-a708-769dc0d0c569",
+                "lv": "b043dea0-a007-4bbe-a708-769dc0d0c569",
+                "lt": "b043dea0-a007-4bbe-a708-769dc0d0c569",
+                "lb": "b043dea0-a007-4bbe-a708-769dc0d0c569",
+                "mk": "b043dea0-a007-4bbe-a708-769dc0d0c569",
+                "mg": "b043dea0-a007-4bbe-a708-769dc0d0c569",
+                "ms": "b043dea0-a007-4bbe-a708-769dc0d0c569",
+                "mt": "b043dea0-a007-4bbe-a708-769dc0d0c569",
+                "mi": "b043dea0-a007-4bbe-a708-769dc0d0c569",
+                "mn": "b043dea0-a007-4bbe-a708-769dc0d0c569",
+                "my": "b043dea0-a007-4bbe-a708-769dc0d0c569",
+                "ne": "b043dea0-a007-4bbe-a708-769dc0d0c569",
+                "no": "b043dea0-a007-4bbe-a708-769dc0d0c569",
+                "ps": "b043dea0-a007-4bbe-a708-769dc0d0c569",
+                "fa": "b043dea0-a007-4bbe-a708-769dc0d0c569",
+                "ro": "b043dea0-a007-4bbe-a708-769dc0d0c569",
+                "sm": "b043dea0-a007-4bbe-a708-769dc0d0c569",
+                "gd": "b043dea0-a007-4bbe-a708-769dc0d0c569",
+                "sr": "b043dea0-a007-4bbe-a708-769dc0d0c569",
+                "st": "b043dea0-a007-4bbe-a708-769dc0d0c569",
+                "sn": "b043dea0-a007-4bbe-a708-769dc0d0c569",
+                "sd": "b043dea0-a007-4bbe-a708-769dc0d0c569",
+                "si": "b043dea0-a007-4bbe-a708-769dc0d0c569",
+                "sk": "b043dea0-a007-4bbe-a708-769dc0d0c569",
+                "sl": "b043dea0-a007-4bbe-a708-769dc0d0c569",
+                "so": "b043dea0-a007-4bbe-a708-769dc0d0c569",
+                "su": "b043dea0-a007-4bbe-a708-769dc0d0c569",
+                "sw": "b043dea0-a007-4bbe-a708-769dc0d0c569",
+                "tg": "4b7f7e2f-9b36-429d-89b9-73685d4dd0b4",
+                "th": "b043dea0-a007-4bbe-a708-769dc0d0c569",
+                "ur": "b043dea0-a007-4bbe-a708-769dc0d0c569",
+                "uz": "b043dea0-a007-4bbe-a708-769dc0d0c569",
+                "vi": "b043dea0-a007-4bbe-a708-769dc0d0c569",
+                "cy": "b043dea0-a007-4bbe-a708-769dc0d0c569",
+                "xh": "b043dea0-a007-4bbe-a708-769dc0d0c569",
+                "yi": "b043dea0-a007-4bbe-a708-769dc0d0c569",
+                "yo": "b043dea0-a007-4bbe-a708-769dc0d0c569",
+                "zu": "b043dea0-a007-4bbe-a708-769dc0d0c569",
+
                 "default": "79f8b5fb-2cc8-479a-80df-29f7a7cf1a3e"
             },
             FIREBASE: {
@@ -1080,6 +1191,11 @@ Return JSON ONLY. No extra keys. No commentary.
                     joinTime: Date.now(),
                     isMicActive: false,
                     isTTSActive: false,
+                    permissions: {
+                        mic: false,
+                        notifications: false,
+                        wakelock: false
+                    },
 
                     // === STRICT SEQUENTIAL PLAYBACK (receiver-side) ===
                     inSeq: 0,                // increments per received message/question
@@ -1198,6 +1314,7 @@ Return JSON ONLY. No extra keys. No commentary.
                 this.registerServiceWorker();
                 this.setupMediaSession();     // background-friendly metadata
                 this.prefetchVoicesCartesia();// fill unmapped voices (runtime)
+                this.updatePermissionIndicators();
             }
 
             // --- NAVIGATION ---
@@ -1288,11 +1405,46 @@ Return JSON ONLY. No extra keys. No commentary.
                     await this.ensureAudioContext();
                     if (this.audioCtx && this.audioCtx.state === 'suspended') await this.audioCtx.resume();
 
+                    this.state.permissions.mic = true;
+                    this.state.permissions.notifications = (Notification?.permission === 'granted');
+                    this.state.permissions.wakelock = !!this.wakeLock;
+                    this.updatePermissionIndicators();
+
                     this.showToast("Native capabilities enabled", "success");
                 } catch (e) {
+                    this.updatePermissionIndicators();
                     this.showToast("Permissions required for full experience", "error");
                     console.error("Permission Error", e);
                 }
+            }
+
+            updatePermissionIndicators() {
+                const micEl = document.getElementById('perm-mic');
+                const notiEl = document.getElementById('perm-notifications');
+                const wakeEl = document.getElementById('perm-wakelock');
+                if (!micEl || !notiEl || !wakeEl) return;
+
+                const notifGranted = ('Notification' in window) && Notification.permission === 'granted';
+                const wakeSupported = 'wakeLock' in navigator;
+                const wakeGranted = !!this.wakeLock;
+
+                const status = {
+                    mic: this.state.permissions.mic ? 'enabled' : 'required',
+                    notifications: notifGranted ? 'enabled' : 'required',
+                    wakelock: wakeSupported ? (wakeGranted ? 'enabled' : 'required') : 'unsupported'
+                };
+
+                const paint = (el, value) => {
+                    el.textContent = value;
+                    el.classList.remove('text-amber-500', 'text-emerald-600', 'text-gray-400');
+                    if (value === 'enabled') el.classList.add('text-emerald-600');
+                    else if (value === 'unsupported') el.classList.add('text-gray-400');
+                    else el.classList.add('text-amber-500');
+                };
+
+                paint(micEl, status.mic);
+                paint(notiEl, status.notifications);
+                paint(wakeEl, status.wakelock);
             }
 
             // ======= MODALS (FIXED: single function; supports question + history) =======
