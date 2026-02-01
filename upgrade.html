@@ -1280,6 +1280,7 @@ Return JSON ONLY. No extra keys. No commentary.
         const TEACHER_QA_SYSTEM_PROMPT = `
 You are SUCCESS_CLASS_TEACHER.
 You are a real teacher in a live classroom. You respond naturally to a student's question.
+Be human-like, direct to the point, and helpful. Explain details only if necessary.
 
 TASK
 Answer the student's question as the teacher.
@@ -1367,7 +1368,8 @@ Now wait for REQUEST and output the teacher answer only.
                     isBroadcasting: false,
                     deferredPrompt: null,
                     isMobile: /iPhone|iPad|iPod|Android/i.test(navigator.userAgent),
-                    isStandalone: window.matchMedia('(display-mode: standalone)').matches || window.navigator.standalone
+                    isStandalone: window.matchMedia('(display-mode: standalone)').matches || window.navigator.standalone,
+                    currentTopic: null
                 };
 
                 this.unsubStudent = null;
@@ -1948,7 +1950,11 @@ Now wait for REQUEST and output the teacher answer only.
                     const seq = ++this.state.inSeq;
 
                     const t = await this.translateWithAI(q.text, q.lang, this.state.lang);
-                    this.renderQuestion(t.translated_text, q.text, q.senderName);
+                    const qId = snap.key;
+                    this.renderQuestion(t.translated_text, q.text, q.senderName, qId);
+
+                    // Generate AI Suggestion in background
+                    this.generateAIResponse(q.text, q.senderName, qId);
 
                     if (this.state.isTTSActive) {
                         await this.enqueueTTS(seq, t.ssml, this.state.lang);
@@ -1956,21 +1962,132 @@ Now wait for REQUEST and output the teacher answer only.
                 });
             }
 
-            renderQuestion(text, original, sender) {
+            renderQuestion(text, original, sender, qId) {
                 const list = document.getElementById('teacher-questions');
                 const card = document.createElement('div');
-                card.className = "bg-white border border-blue-100 p-3 rounded-xl shadow-sm animate-slide-up cursor-pointer hover:border-blue-300 transition-colors";
+                card.id = `q-card-${qId}`;
+                card.className = "bg-white border border-blue-100 p-4 rounded-2xl shadow-sm animate-slide-up flex flex-col gap-3";
                 card.innerHTML = `
-                    <div class="flex justify-between items-start mb-1">
-                        <span class="text-[10px] font-bold bg-blue-50 text-blue-600 px-1.5 py-0.5 rounded uppercase">${sender}</span>
+                    <div class="flex justify-between items-start">
+                        <span class="text-[10px] font-bold bg-blue-50 text-blue-600 px-2 py-1 rounded-full uppercase tracking-wider">${sender}</span>
+                        <span class="text-[10px] text-gray-400 font-mono">ID: ${qId.split('-')[0]}</span>
                     </div>
-                    <p class="text-sm font-semibold text-gray-800 leading-snug">${text}</p>
-                    <p class="text-xs text-gray-400 italic mt-1 truncate">${original}</p>
+                    <div>
+                        <p class="text-sm font-bold text-gray-900 leading-snug">${text}</p>
+                        <p class="text-xs text-gray-400 italic mt-1">${original}</p>
+                    </div>
+
+                    <!-- AI Suggestion Area -->
+                    <div class="bg-purple-50 rounded-xl p-3 border border-purple-100 flex flex-col gap-2">
+                        <div class="flex items-center justify-between">
+                            <h4 class="text-[10px] font-black text-purple-600 uppercase tracking-widest flex items-center gap-1.5">
+                                <i class="fa-solid fa-wand-magic-sparkles"></i> AI Suggestion
+                            </h4>
+                            <div id="ai-status-${qId}" class="flex items-center gap-1.5">
+                                <span class="w-1.5 h-1.5 bg-purple-400 rounded-full animate-pulse"></span>
+                                <span class="text-[10px] font-bold text-purple-400">Thinking...</span>
+                            </div>
+                        </div>
+                        <textarea id="ai-resp-${qId}" 
+                            class="hidden w-full bg-white/50 border border-purple-100 rounded-lg p-2 text-xs focus:ring-1 focus:ring-purple-400 outline-none transition-all resize-none font-medium text-gray-700"
+                            rows="3" placeholder="Waiting for AI..."></textarea>
+                        
+                        <div id="ai-actions-${qId}" class="hidden flex gap-2">
+                            <button onclick="App.approveAIAnswer('${qId}')"
+                                class="flex-1 py-1.5 bg-purple-600 hover:bg-purple-700 text-white text-[10px] font-bold rounded-lg transition-all flex items-center justify-center gap-1.5 active:scale-95 shadow-sm shadow-purple-200">
+                                <i class="fa-solid fa-paper-plane"></i> Approve & Send
+                            </button>
+                            <button onclick="App.regenerateAIAnswer('${qId}', '${original.replace(/'/g, "\\'")}', '${sender.replace(/'/g, "\\'")}')"
+                                class="w-8 h-8 bg-white border border-purple-100 text-purple-400 hover:text-purple-600 rounded-lg transition-all flex items-center justify-center active:scale-95"
+                                title="Regenerate">
+                                <i class="fa-solid fa-arrows-rotate text-xs"></i>
+                            </button>
+                        </div>
+                    </div>
                 `;
                 list.prepend(card);
 
                 const count = document.getElementById('question-count');
                 count.innerText = parseInt(count.innerText) + 1;
+            }
+
+            async generateAIResponse(question, studentName, qId) {
+                const status = document.getElementById(`ai-status-${qId}`);
+                const area = document.getElementById(`ai-resp-${qId}`);
+                const actions = document.getElementById(`ai-actions-${qId}`);
+
+                try {
+                    const userRequest = {
+                        language: this.state.lang,
+                        student_name: studentName,
+                        question: question,
+                        topic: this.state.currentTopic,
+                        recent_context: null
+                    };
+
+                    const res = await fetch("https://api.moonshot.ai/v1/chat/completions", {
+                        method: "POST",
+                        headers: {
+                            "Authorization": `Bearer ${CREDENTIALS.MOONSHOT}`,
+                            "Content-Type": "application/json"
+                        },
+                        body: JSON.stringify({
+                            model: "kimi-latest",
+                            messages: [
+                                { role: "system", content: TEACHER_QA_SYSTEM_PROMPT },
+                                { role: "user", content: JSON.stringify(userRequest) }
+                            ],
+                            temperature: 0.7,
+                            max_tokens: 1024
+                        })
+                    });
+
+                    const json = await res.json();
+                    const text = json.choices?.[0]?.message?.content;
+                    if (!text) throw new Error("AI failed to answer");
+
+                    area.value = text;
+                    area.classList.remove('hidden');
+                    status.classList.add('hidden');
+                    actions.classList.remove('hidden');
+
+                } catch (e) {
+                    console.error("AI Answer Error", e);
+                    if (status) status.innerHTML = `<span class="text-red-500 font-bold text-[10px]">Failed</span>`;
+                }
+            }
+
+            regenerateAIAnswer(qId, question, studentName) {
+                const status = document.getElementById(`ai-status-${qId}`);
+                const area = document.getElementById(`ai-resp-${qId}`);
+                const actions = document.getElementById(`ai-actions-${qId}`);
+
+                status.classList.remove('hidden');
+                status.innerHTML = `<span class="w-1.5 h-1.5 bg-purple-400 rounded-full animate-pulse"></span><span class="text-[10px] font-bold text-purple-400">Thinking...</span>`;
+                area.classList.add('hidden');
+                actions.classList.add('hidden');
+
+                this.generateAIResponse(question, studentName, qId);
+            }
+
+            approveAIAnswer(qId) {
+                const area = document.getElementById(`ai-resp-${qId}`);
+                const text = area.value.trim();
+                if (!text) return;
+
+                this.broadcastMessage(text);
+                this.showToast("Answer Broadcasted", "success");
+
+                // Mark card as answered
+                const card = document.getElementById(`q-card-${qId}`);
+                if (card) {
+                    card.classList.add('opacity-50', 'bg-gray-50');
+                    card.classList.remove('border-blue-100');
+                    const actions = document.getElementById(`ai-actions-${qId}`);
+                    if (actions) actions.classList.add('hidden');
+                    const area = document.getElementById(`ai-resp-${qId}`);
+                    if (area) area.disabled = true;
+                }
             }
 
             // =========================
@@ -2809,6 +2926,7 @@ Now wait for REQUEST and output the teacher answer only.
 
             async generateAIContent(topic) {
                 if (!topic || !topic.trim()) return;
+                this.state.currentTopic = topic;
 
                 // Show loading state
                 const input = document.getElementById('magic-topic');
