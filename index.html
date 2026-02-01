@@ -365,11 +365,19 @@
                     conversation.</p>
             </div>
 
-            <button onclick="App.startSession()"
-                class="btn-modern w-full bg-[#22c55e] hover:bg-[#16a34a] text-white font-bold py-4 rounded-xl shadow-lg shadow-green-500/20 flex items-center justify-center gap-3 animate-slide-up">
-                <span>Start Session</span>
-                <i class="fa-solid fa-play"></i>
-            </button>
+            <div class="flex flex-col gap-3 w-full">
+                <button onclick="App.startSession()"
+                    class="btn-modern w-full bg-[#22c55e] hover:bg-[#16a34a] text-white font-bold py-4 rounded-xl shadow-lg shadow-green-500/20 flex items-center justify-center gap-3 animate-slide-up">
+                    <span>Start Session</span>
+                    <i class="fa-solid fa-play"></i>
+                </button>
+                <button onclick="App.shareRoom()"
+                    class="btn-modern w-full bg-blue-600 hover:bg-blue-700 text-white font-bold py-3.5 rounded-xl shadow-lg shadow-blue-500/10 flex items-center justify-center gap-3 animate-slide-up"
+                    style="animation-delay: 0.1s;">
+                    <span>Share Room Link</span>
+                    <i class="fa-solid fa-share-nodes"></i>
+                </button>
+            </div>
         </section>
 
         <!-- ================= VIEW: STUDENT ================= -->
@@ -458,17 +466,22 @@
                         <i class="fa-solid fa-power-off"></i>
                     </button>
                     <div class="h-6 w-px bg-gray-200 mx-1"></div>
-                    <div>
-                        <h1 class="font-bold text-gray-900 text-sm">Teacher</h1>
-                        <div class="flex items-center gap-1.5 cursor-pointer hover:bg-gray-100 px-1.5 rounded transition-colors"
-                            onclick="App.copyCode()">
-                            <p class="text-xs text-gray-500 font-mono tracking-wider " id="teacher-code-display">CODE
-                            </p>
-                            <i class="fa-regular fa-copy text-[10px] text-gray-400"></i>
+                    <div class="flex items-center gap-2">
+                        <div>
+                            <h1 class="font-bold text-gray-900 text-sm">Teacher</h1>
+                            <div class="flex items-center gap-1.5 cursor-pointer hover:bg-gray-100 px-1.5 rounded transition-colors"
+                                onclick="App.copyCode()">
+                                <p class="text-xs text-gray-500 font-mono tracking-wider " id="teacher-code-display">
+                                    CODE
+                                </p>
+                                <i class="fa-regular fa-copy text-[10px] text-gray-400"></i>
+                            </div>
                         </div>
+                        <button onclick="App.shareRoom()"
+                            class="w-8 h-8 rounded-full bg-gray-50 flex items-center justify-center text-gray-400 hover:text-blue-500 transition-colors">
+                            <i class="fa-solid fa-share-nodes text-xs"></i>
+                        </button>
                     </div>
-
-
                 </div>
 
                 <!-- Actions -->
@@ -495,7 +508,7 @@
                     </button>
                     <!-- Mic Toggle -->
                     <button id="mic-btn" onclick="App.toggleMic()" title="Toggle Broadcast"
-                        class="btn-modern relative w-10 h-10 rounded-full bg-gray-100 text-gray-600 flex items-center justify-center transition-all hover:bg-gray-200">
+                        class="relative w-10 h-10 rounded-full bg-gray-100 text-gray-600 flex items-center justify-center transition-all hover:bg-gray-200">
                         <i class="fa-solid fa-microphone-slash text-sm"></i>
                     </button>
                 </div>
@@ -623,7 +636,7 @@
                                     <i class="fa-solid fa-server text-xs"></i>
                                 </div>
                                 <div class="text-xs">
-                                    <div class="font-bold text-gray-700">Local Qwen3 TTS</div>
+                                    <div class="font-bold text-gray-700">Local Orbit Beta TTS</div>
                                     <div class="text-[10px] text-gray-400">Use Docker backend</div>
                                 </div>
                             </div>
@@ -722,6 +735,74 @@
             </div>
         </div>
 
+        <!-- ================= MODAL: INSTALL APP ================= -->
+        <div id="modal-install" class="fixed inset-0 z-50 hidden">
+            <!-- Backdrop -->
+            <div class="absolute inset-0 bg-gray-900/60 backdrop-blur-md transition-opacity opacity-0"
+                id="install-backdrop" onclick="App.toggleModal('install', false)"></div>
+
+            <!-- Content -->
+            <!-- Content (Centered Modal) -->
+            <div class="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-11/12 max-w-sm transition-all duration-300 opacity-0 scale-95"
+                id="install-panel">
+                <div
+                    class="bg-white rounded-[2.5rem] shadow-2xl p-8 text-center border-4 border-white ring-4 ring-blue-50/50">
+                    <!-- App Icon -->
+                    <div
+                        class="w-24 h-24 bg-white rounded-3xl mx-auto mb-6 flex items-center justify-center shadow-xl shadow-blue-500/20 animate-bounce-slow overflow-hidden">
+                        <img src="pwa_icon.png" alt="App Icon" class="w-full h-full object-cover">
+                    </div>
+
+                    <h3 class="text-2xl font-black text-gray-900 mb-2">Install Success Class</h3>
+                    <p class="text-gray-500 text-sm leading-relaxed mb-8">Get the full classroom experience with offline
+                        access and real-time notifications.</p>
+
+                    <!-- Instructions / Buttons -->
+                    <div class="space-y-3">
+                        <!-- Android/Desktop Prompt -->
+                        <button id="pwa-install-btn" onclick="App.handleInstallApp()"
+                            class="w-full py-4 bg-blue-600 hover:bg-blue-700 text-white font-bold rounded-2xl shadow-lg shadow-blue-500/20 transition-all flex items-center justify-center gap-3 active:scale-95">
+                            <i class="fa-solid fa-download"></i>
+                            <span>Install Now</span>
+                        </button>
+
+                        <!-- iOS Guide (Auto-hidden if not iOS) -->
+                        <div id="ios-install-guide"
+                            class="hidden p-4 bg-gray-50 rounded-2xl border border-gray-100 text-left">
+                            <p class="text-[10px] font-bold text-gray-400 uppercase tracking-widest mb-3">iOS
+                                Instructions</p>
+                            <div class="space-y-3">
+                                <div class="flex items-center gap-3 text-xs font-medium text-gray-700">
+                                    <span
+                                        class="w-5 h-5 rounded-full bg-white flex items-center justify-center shadow-sm text-[10px]">1</span>
+                                    <span>Tap the <i class="fa-solid fa-arrow-up-from-bracket text-blue-500 mx-1"></i>
+                                        "Share" icon</span>
+                                </div>
+                                <div class="flex items-center gap-3 text-xs font-medium text-gray-700">
+                                    <span
+                                        class="w-5 h-5 rounded-full bg-white flex items-center justify-center shadow-sm text-[10px]">2</span>
+                                    <span>Select <i class="fa-solid fa-plus-square text-blue-500 mx-1"></i> "Add to Home
+                                        Screen"</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Combined Permissions Button -->
+                        <button onclick="App.requestPermissions(); App.toggleModal('install', false)"
+                            class="w-full py-4 bg-white border-2 border-gray-100 text-gray-600 font-bold rounded-2xl hover:bg-gray-50 transition-all flex items-center justify-center gap-3 active:scale-95">
+                            <i class="fa-solid fa-shield-check"></i>
+                            <span>Grant Permissions</span>
+                        </button>
+
+                        <button onclick="App.toggleModal('install', false)"
+                            class="w-full py-3 text-xs font-bold text-gray-400 hover:text-gray-600 transition-colors uppercase tracking-widest">
+                            Maybe Later
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
     </main>
 
     <!-- ================= LOGIC ================= -->
@@ -734,9 +815,9 @@
         // CREDENTIALS (UNCHANGED + ADD OPENAI)
         // =========================
         const CREDENTIALS = {
-            DEEPGRAM: "",
-            CARTESIA: "",
-            OPENAI: "",
+            DEEPGRAM: "11ee938d032ce7c36c6fa82338274be5e4ada847",
+            CARTESIA: "sk_car_yWEX9Mp2LwKju8FXyosGhj",
+            OPENAI: "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",
             CARTESIA_VOICES: {
                 "en": "79f8b5fb-2cc8-479a-80df-29f7a7cf1a3e", // Nonfiction Man
                 "fr": "5c3c89e5-535f-43ef-b14d-f8ffe148c1f0", // French Narrator Man
@@ -1006,8 +1087,11 @@ Return JSON ONLY. No extra keys. No commentary.
                     inFlightTTS: new Set(),   // seq to avoid double synthesis
                     isAudioPlaying: false,
                     audioUnlocked: false,
-                    audioUnlocked: false,
-                    audioSource: 'mic' // 'mic' | 'system'
+                    audioSource: 'mic', // 'mic' | 'system'
+                    isBroadcasting: false,
+                    deferredPrompt: null,
+                    isMobile: /iPhone|iPad|iPod|Android/i.test(navigator.userAgent),
+                    isStandalone: window.matchMedia('(display-mode: standalone)').matches || window.navigator.standalone
                 };
 
                 this.unsubStudent = null;
@@ -1032,12 +1116,14 @@ Return JSON ONLY. No extra keys. No commentary.
                     byLang: new Map() // lang -> [voiceId...]
                 };
 
-                this.useLocalTTS = false; // State for Qwen3 TTS
+                this.useLocalTTS = false; // State for Orbit Beta TTS
 
                 this.history = JSON.parse(localStorage.getItem('orbit_history') || '[]');
 
                 this.bindAll();
                 this.init();
+                this.setupPWAInstall();
+                window.App = this; // Expose instance for inline handlers
             }
 
             saveState() {
@@ -1137,6 +1223,50 @@ Return JSON ONLY. No extra keys. No commentary.
                 }
             }
 
+            setupPWAInstall() {
+                // 1. Capture the Chrome install prompt
+                window.addEventListener('beforeinstallprompt', (e) => {
+                    e.preventDefault();
+                    this.state.deferredPrompt = e;
+                });
+
+                // 2. Clear prompt on success
+                window.addEventListener('appinstalled', () => {
+                    this.state.deferredPrompt = null;
+                    this.toggleModal('install', false);
+                    this.showToast("App Installed Successfully!", "success");
+                });
+
+                // 3. Trigger modal if on mobile + not installed
+                if (this.state.isMobile && !this.state.isStandalone) {
+                    setTimeout(() => {
+                        this.toggleModal('install', true);
+                    }, 5000); // 5s delay for better UX
+                }
+            }
+
+            async handleInstallApp() {
+                if (this.state.deferredPrompt) {
+                    try {
+                        this.state.deferredPrompt.prompt();
+                        const { outcome } = await this.state.deferredPrompt.userChoice;
+                        console.log("Install prompt outcome:", outcome);
+                        if (outcome === 'accepted') {
+                            this.state.deferredPrompt = null;
+                        }
+                    } catch (e) {
+                        console.error("Install prompt error:", e);
+                        // Fallback: If prompt fails (e.g., detached), just null it and guide user
+                        this.state.deferredPrompt = null;
+                        this.showToast("Install manually via browser menu", "info");
+                    }
+                } else if (/iPhone|iPad|iPod/i.test(navigator.userAgent)) {
+                    this.showToast("Follow the on-screen guide", "info");
+                } else {
+                    this.showToast("App already installed or not supported", "info");
+                }
+            }
+
             async requestWakeLock() {
                 if ('wakeLock' in navigator) {
                     try {
@@ -1177,24 +1307,51 @@ Return JSON ONLY. No extra keys. No commentary.
             }
 
             // ======= MODALS (FIXED: single function; supports question + history) =======
-            toggleModal(type) {
+            toggleModal(type, forceState = null) {
                 const modal = document.getElementById(`modal-${type}`);
                 if (!modal) return;
 
-                const bd = document.getElementById(type === 'history' ? 'history-backdrop' : 'modal-backdrop');
-                const panel = document.getElementById(type === 'history' ? 'history-panel' : 'modal-panel');
+                const bd = document.getElementById(`${type === 'history' ? 'history' : type === 'install' ? 'install' : 'modal'}-backdrop`);
+                const panel = document.getElementById(`${type === 'history' ? 'history' : type === 'install' ? 'install' : 'modal'}-panel`);
 
                 if (!bd || !panel) return;
 
-                if (modal.classList.contains('hidden')) {
+                const isHidden = modal.classList.contains('hidden');
+                const shouldShow = forceState !== null ? forceState : isHidden;
+
+                if (shouldShow) {
                     modal.classList.remove('hidden');
                     if (type === 'history') this.loadHistory();
 
+                    // Handle Install Modal specifically (iOS vs Others)
+                    if (type === 'install') {
+                        const isIOS = /iPhone|iPad|iPod/i.test(navigator.userAgent);
+                        const iosGuide = document.getElementById('ios-install-guide');
+                        const pwaBtn = document.getElementById('pwa-install-btn');
+                        if (iosGuide && pwaBtn) {
+                            if (isIOS) {
+                                iosGuide.classList.remove('hidden');
+                                pwaBtn.classList.add('hidden');
+                            } else {
+                                iosGuide.classList.add('hidden');
+                                pwaBtn.classList.remove('hidden');
+                            }
+                        }
+                    }
+
                     setTimeout(() => {
                         bd.style.opacity = '1';
-                        panel.style.transform = (window.innerWidth < 768)
-                            ? 'translateY(0)'
-                            : 'translate(-50%, -50%)';
+
+                        // Handle generic modal (fullscreen/sheet) vs "Install" (centered dialog)
+                        if (type === 'install') {
+                            panel.classList.remove('opacity-0', 'scale-95');
+                            panel.classList.add('opacity-100', 'scale-100');
+                        } else {
+                            panel.style.transform = (window.innerWidth < 768)
+                                ? 'translateY(0)'
+                                : 'translate(-50%, -50%)';
+                        }
+
                         if (type === 'question') {
                             const qi = document.getElementById('q-input');
                             if (qi) qi.focus();
@@ -1202,9 +1359,15 @@ Return JSON ONLY. No extra keys. No commentary.
                     }, 10);
                 } else {
                     bd.style.opacity = '0';
-                    panel.style.transform = (window.innerWidth < 768)
-                        ? 'translateY(100%)'
-                        : 'translate(-50%, 0)';
+
+                    if (type === 'install') {
+                        panel.classList.remove('opacity-100', 'scale-100');
+                        panel.classList.add('opacity-0', 'scale-95');
+                    } else {
+                        panel.style.transform = (window.innerWidth < 768)
+                            ? 'translateY(100%)'
+                            : 'translate(-50%, 0)';
+                    }
                     setTimeout(() => modal.classList.add('hidden'), 300);
                 }
             }
@@ -1361,13 +1524,46 @@ Return JSON ONLY. No extra keys. No commentary.
                 this.state.room = '';
                 this.state.name = '';
 
-                // reset playback gate
-                this.resetPlaybackGate();
-
                 this.toggleTeacherMode(false);
                 this.switchView('view-login');
+                this.showToast("Logged Out", "info");
             }
 
+            // --- NATIVE CAPABILITIES ---
+            copyCode() {
+                if (!this.state.room) return;
+                navigator.clipboard.writeText(this.state.room).then(() => {
+                    this.showToast("Room Code Copied!", "success");
+                });
+            }
+
+            copyLink() {
+                if (!this.state.room) return;
+                const url = `${window.location.origin}${window.location.pathname}?room=${this.state.room}`;
+                navigator.clipboard.writeText(url).then(() => {
+                    this.showToast("Link Copied to Clipboard!", "success");
+                });
+            }
+
+            async shareRoom() {
+                if (!this.state.room) return;
+                const url = `${window.location.origin}${window.location.pathname}?room=${this.state.room}`;
+                const shareData = {
+                    title: 'Join Success Class',
+                    text: `Join my live class! Room Code: ${this.state.room}`,
+                    url: url
+                };
+
+                if (navigator.share && navigator.canShare && navigator.canShare(shareData)) {
+                    try {
+                        await navigator.share(shareData);
+                    } catch (e) {
+                        if (e.name !== 'AbortError') this.copyLink();
+                    }
+                } else {
+                    this.copyLink();
+                }
+            }
             resetPlaybackGate() {
                 // Stop any current audio
                 try { this.audioEl.pause(); } catch (_) { }
@@ -1747,7 +1943,7 @@ Return JSON ONLY. No extra keys. No commentary.
                 return await res.blob();
             }
             // =========================
-            // Local Qwen3 TTS Integration
+            // Local Orbit Beta TTS Integration
             // =========================
             async qwen3TTSBytes(text, lang) {
                 try {
@@ -1782,7 +1978,7 @@ Return JSON ONLY. No extra keys. No commentary.
                         })
                     });
 
-                    if (!res.ok) throw new Error("Qwen3 TTS Fail: " + res.status);
+                    if (!res.ok) throw new Error("Orbit Beta TTS Fail: " + res.status);
                     return await res.blob();
                 } catch (e) {
                     console.error('Local TTS Error', e);
