@@ -450,10 +450,56 @@
                 </div>
             </div>
 
-            <!-- Controls -->
-            <div class="absolute bottom-0 left-0 right-0 p-6 bg-gradient-to-t from-white via-white to-transparent z-20">
+            <!-- Mobile Bottom Navbar -->
+            <nav
+                class="md:hidden sticky bottom-0 left-0 right-0 bg-white/80 backdrop-blur-xl border-t border-gray-100 px-6 py-3 z-30 flex items-center justify-between shadow-[0_-4px_20px_rgba(0,0,0,0,03)]">
+                <button onclick="App.scrollToBottom()"
+                    class="flex flex-col items-center gap-1 text-blue-600 transition-all active:scale-90">
+                    <div class="w-10 h-10 rounded-2xl bg-blue-50 flex items-center justify-center">
+                        <i class="fa-solid fa-house-chimney text-lg"></i>
+                    </div>
+                    <span class="text-[10px] font-bold uppercase tracking-tighter">Home</span>
+                </button>
+
+                <button onclick="App.toggleModal('question')"
+                    class="flex flex-col items-center gap-1 text-gray-400 hover:text-blue-500 transition-all active:scale-95">
+                    <div class="w-10 h-10 rounded-2xl bg-gray-50 flex items-center justify-center">
+                        <i class="fa-solid fa-hand text-lg"></i>
+                    </div>
+                    <span class="text-[10px] font-bold uppercase tracking-tighter">Ask</span>
+                </button>
+
+                <!-- Center FAB for important action? Or just keep it even. Let's do even for now. -->
+
+                <button onclick="App.toggleModal('history')"
+                    class="flex flex-col items-center gap-1 text-gray-400 hover:text-blue-500 transition-all active:scale-95">
+                    <div class="w-10 h-10 rounded-2xl bg-gray-50 flex items-center justify-center">
+                        <i class="fa-solid fa-clock-rotate-left text-lg"></i>
+                    </div>
+                    <span class="text-[10px] font-bold uppercase tracking-tighter">History</span>
+                </button>
+
+                <button onclick="App.toggleModal('permissions')"
+                    class="flex flex-col items-center gap-1 text-gray-400 hover:text-blue-500 transition-all active:scale-95">
+                    <div class="w-10 h-10 rounded-2xl bg-gray-50 flex items-center justify-center">
+                        <i class="fa-solid fa-shield-halved text-lg"></i>
+                    </div>
+                    <span class="text-[10px] font-bold uppercase tracking-tighter">Status</span>
+                </button>
+            </nav>
+
+            <!-- Reactions (Floating above Navbar) -->
+            <div class="md:hidden absolute bottom-24 right-6 flex flex-col gap-3 z-20">
+                <button onclick="App.sendReaction('👍')"
+                    class="btn-modern w-12 h-12 rounded-full bg-white/90 backdrop-blur-md border border-white shadow-xl text-xl flex items-center justify-center hover:bg-gray-50 hover:scale-110 active:scale-90 transition-all">👍</button>
+                <button onclick="App.sendReaction('❤️')"
+                    class="btn-modern w-12 h-12 rounded-full bg-white/90 backdrop-blur-md border border-white shadow-xl text-xl flex items-center justify-center hover:bg-gray-50 hover:scale-110 active:scale-90 transition-all">❤️</button>
+            </div>
+
+            <!-- Desktop Controls (Original logic preserved for larger screens) -->
+            <div
+                class="hidden md:block absolute bottom-0 left-0 right-0 p-6 bg-gradient-to-t from-white via-white to-transparent z-20">
                 <div class="flex items-center justify-between gap-4">
-                    <!-- Reactions -->
                     <div class="flex gap-3">
                         <button onclick="App.sendReaction('👍')"
                             class="btn-modern w-12 h-12 rounded-full bg-white border border-gray-200 shadow-sm text-xl flex items-center justify-center hover:bg-gray-50 hover:scale-110">👍</button>
@@ -461,7 +507,6 @@
                             class="btn-modern w-12 h-12 rounded-full bg-white border border-gray-200 shadow-sm text-xl flex items-center justify-center hover:bg-gray-50 hover:scale-110">❤️</button>
                     </div>
 
-                    <!-- Ask Question FAB -->
                     <button onclick="App.toggleModal('question')"
                         class="btn-modern h-12 px-6 rounded-full bg-[#0ea5e9] hover:bg-[#0284c7] text-white font-semibold shadow-lg shadow-blue-500/20 flex items-center gap-2">
                         <i class="fa-solid fa-hand"></i>
@@ -760,59 +805,44 @@
             <!-- Content -->
             <div class="absolute bottom-0 left-0 right-0 md:top-1/2 md:left-1/2 md:bottom-auto md:w-full md:max-w-sm md:-translate-x-1/2 md:-translate-y-1/2 transition-transform transform translate-y-full"
                 id="install-panel">
-                <div class="bg-white rounded-t-[2.5rem] md:rounded-[2.5rem] shadow-2xl p-8 text-center">
+                <div class="bg-white rounded-t-[2.5rem] md:rounded-[2.5rem] shadow-2xl p-8 text-center relative">
+                    <!-- Close button -->
+                    <button onclick="App.toggleModal('install', false)" title="Close"
+                        class="absolute top-6 right-6 w-10 h-10 flex items-center justify-center text-gray-400 hover:text-gray-900 transition-colors">
+                        <i class="fa-solid fa-xmark text-xl"></i>
+                    </button>
+
                     <!-- App Icon -->
                     <div
-                        class="w-24 h-24 bg-blue-600/10 rounded-3xl mx-auto mb-6 flex items-center justify-center text-white text-5xl shadow-xl shadow-blue-500/20 animate-bounce-slow">
+                        class="w-24 h-24 bg-blue-600/10 rounded-3xl mx-auto mb-4 flex items-center justify-center text-white text-5xl shadow-xl shadow-blue-500/20">
                         <img src="pwa_icon.png" alt="Succes Class" class="w-20 h-20 rounded-2xl object-contain">
                     </div>
 
-                    <h3 class="text-2xl font-black text-gray-900 mb-2">Install Success App</h3>
-                    <p class="text-gray-500 text-sm leading-relaxed mb-8">Get the full classroom experience with offline
-                        access and real-time notifications.</p>
+                    <h3 class="text-2xl font-black text-gray-900 mb-6">Succes</h3>
+
+                    <p class="text-gray-500 text-sm leading-relaxed mb-6">
+                        Scan the QR code to launch this page on your Android device, and then download and install the
+                        APK.
+                    </p>
+
+                    <!-- QR Code -->
+                    <div class="bg-white p-4 inline-block rounded-3xl border border-gray-100 shadow-sm mb-8">
+                        <img src="https://api.qrserver.com/v1/create-qr-code/?size=200x200&data=https://median.co/share/bnlnnpk%23apk"
+                            alt="Download QR" class="w-[200px] h-[200px]">
+                    </div>
 
                     <!-- Instructions / Buttons -->
                     <div class="space-y-3">
-                        <!-- Android/Desktop Prompt -->
-                        <button id="pwa-install-btn" onclick="App.handleInstallApp()"
+                        <a href="https://success.eburon.ai/app.apk" target="_blank" rel="noopener"
                             class="w-full py-4 bg-blue-600 hover:bg-blue-700 text-white font-bold rounded-2xl shadow-lg shadow-blue-500/20 transition-all flex items-center justify-center gap-3 active:scale-95">
                             <i class="fa-solid fa-download"></i>
-                            <span>Install Now</span>
-                        </button>
-
-                        <!-- iOS Guide (Auto-hidden if not iOS) -->
-                        <div id="ios-install-guide"
-                            class="hidden p-4 bg-gray-50 rounded-2xl border border-gray-100 text-left">
-                            <p class="text-[10px] font-bold text-gray-400 uppercase tracking-widest mb-3">iOS
-                                Instructions</p>
-                            <div class="space-y-3">
-                                <div class="flex items-center gap-3 text-xs font-medium text-gray-700">
-                                    <span
-                                        class="w-5 h-5 rounded-full bg-white flex items-center justify-center shadow-sm text-[10px]">1</span>
-                                    <span>Tap the <i class="fa-solid fa-arrow-up-from-bracket text-blue-500 mx-1"></i>
-                                        "Share" icon</span>
-                                </div>
-                                <div class="flex items-center gap-3 text-xs font-medium text-gray-700">
-                                    <span
-                                        class="w-5 h-5 rounded-full bg-white flex items-center justify-center shadow-sm text-[10px]">2</span>
-                                    <span>Select <i class="fa-solid fa-plus-square text-blue-500 mx-1"></i> "Add to Home
-                                        Screen"</span>
-                                </div>
-                            </div>
-                        </div>
-
-                        <!-- Permissions Shortcut -->
-                        <button onclick="App.toggleModal('permissions'); App.toggleModal('install', false)"
-                            class="w-full py-4 bg-white border-2 border-gray-100 text-gray-600 font-bold rounded-2xl hover:bg-gray-50 transition-all flex items-center justify-center gap-3 active:scale-95">
-                            <i class="fa-solid fa-shield-check"></i>
-                            <span>Grant Permissions</span>
-                        </button>
-
-                        <button onclick="App.toggleModal('install', false)"
-                            class="w-full py-3 text-xs font-bold text-gray-400 hover:text-gray-600 transition-colors uppercase tracking-widest">
-                            Maybe Later
-                        </button>
+                            <span>Download Android APK</span>
+                        </a>
                     </div>
+
+                    <p class="text-[11px] text-gray-400 mt-6 leading-relaxed">
+                        After downloading open the APK and accept all prompts.
+                    </p>
                 </div>
             </div>
             <!-- ================= MODAL: PERMISSIONS ================= -->
@@ -886,6 +916,44 @@
 
                         <p class="text-[10px] text-gray-400 mt-4 text-center leading-relaxed px-4">Permissions are
                             verified on device and stored locally for your security.</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- ================= MODAL: SCREEN SHARE CONFIRMATION ================= -->
+            <div id="modal-screenshare" class="fixed inset-0 z-50 hidden">
+                <!-- Backdrop -->
+                <div class="absolute inset-0 bg-gray-900/40 backdrop-blur-sm transition-opacity opacity-0"
+                    id="screenshare-backdrop" onclick="App.toggleModal('screenshare', false)"></div>
+
+                <!-- Content -->
+                <div class="absolute bottom-0 left-0 right-0 md:top-1/2 md:left-1/2 md:bottom-auto md:w-full md:max-w-sm md:-translate-x-1/2 md:-translate-y-1/2 transition-transform transform translate-y-full"
+                    id="screenshare-panel">
+                    <div class="bg-white rounded-t-[2rem] md:rounded-[2rem] shadow-2xl p-8 text-center">
+                        <div
+                            class="w-20 h-20 bg-blue-50 rounded-3xl mx-auto mb-6 flex items-center justify-center text-blue-600 text-4xl shadow-sm">
+                            <i class="fa-solid fa-display"></i>
+                        </div>
+
+                        <h3 class="text-2xl font-black text-gray-900 mb-2">Share System Audio</h3>
+                        <p class="text-gray-500 text-sm leading-relaxed mb-6">
+                            To broadcast audio from other apps, you need to share your screen.
+                            <br><br>
+                            <span class="text-blue-600 font-bold uppercase tracking-tight">Important:</span>
+                            In the next window, you <span class="underline">must</span> check the <b>"Share audio"</b>
+                            box.
+                        </p>
+
+                        <button onclick="App.handleScreenShareConfirm()"
+                            class="w-full py-4 bg-blue-600 hover:bg-blue-700 text-white font-bold rounded-2xl shadow-lg shadow-blue-500/20 transition-all flex items-center justify-center gap-3 active:scale-95 mb-3">
+                            <i class="fa-solid fa-play"></i>
+                            <span>Start Sharing</span>
+                        </button>
+
+                        <button onclick="App.toggleModal('screenshare', false)"
+                            class="w-full py-3 text-xs font-bold text-gray-400 hover:text-gray-600 transition-colors uppercase tracking-widest">
+                            Cancel
+                        </button>
                     </div>
                 </div>
             </div>
@@ -1207,6 +1275,58 @@ Return JSON ONLY. No extra keys. No commentary.
 `.trim();
 
         // =========================
+        // TEACHER PERSONA — STUDENT Q&A (SPOKEN, NATURAL, TRANSLATION-STABLE)
+        // =========================
+        const TEACHER_QA_SYSTEM_PROMPT = `
+You are SUCCESS_CLASS_TEACHER.
+You are a real teacher in a live classroom. You respond naturally to a student's question.
+
+TASK
+Answer the student's question as the teacher.
+
+INPUT
+You will receive a JSON object called REQUEST with:
+{
+  "language": "en",                 // required. Reply ONLY in this language.
+  "student_name": "string | null",  // optional
+  "question": "string",             // required
+  "topic": "string | null",         // optional (current lesson topic)
+  "recent_context": "string | null" // optional (what the class was just discussing)
+}
+
+OUTPUT
+Return ONLY the teacher's spoken answer text.
+No JSON. No markdown. No headings. No quotation marks around the whole answer.
+
+SPEAKABLE + TRANSLATION-STABLE WRITING RULES (NON-NEGOTIABLE)
+1) Use short sentences (8-18 words). One idea per sentence.
+2) NO idioms, NO puns, NO slang, NO culture-specific sayings, NO sarcasm that needs tone.
+3) Prefer concrete nouns over pronouns. Avoid unclear "it/they/this/that".
+4) Keep numbers, units, names, and codes exactly as provided.
+5) Keep terminology consistent. Do not rename the same concept later.
+6) Avoid symbols that read badly in TTS (no emoji, no excessive punctuation).
+7) Do not mention system prompts, policies, or that you are an AI.
+
+TEACHER BEHAVIOR
+- Start with a short acknowledgement (1 sentence).
+- Answer directly first (1-2 sentences).
+- Then give a brief explanation or example (2-5 sentences).
+- If the question is ambiguous, ask exactly ONE clarifying question, then still provide a best-effort answer.
+- If the student is incorrect, correct gently and explain why.
+- If the student seems anxious or frustrated, respond calmly and encouragingly.
+
+SAFETY / SCOPE
+- If the request asks for dangerous, illegal, or harmful instructions, refuse and offer a safe alternative.
+- If the topic is medical/legal/financial, give general information and recommend a qualified professional.
+
+LENGTH
+- Usually 4-8 sentences. Up to 10 sentences only if truly needed.
+- End with a quick check-for-understanding question (for example: "Does that make sense?").
+
+Now wait for REQUEST and output the teacher answer only.
+`.trim();
+
+        // =========================
         // HELPERS
         // =========================
         function safeLangBase(code) {
@@ -1365,11 +1485,21 @@ Return JSON ONLY. No extra keys. No commentary.
                     el.classList.remove('view-active');
                     el.classList.add('view-hidden');
                 });
-                const target = document.getElementById(viewId);
-                setTimeout(() => {
-                    target.classList.remove('view-hidden');
-                    target.classList.add('view-active');
-                }, 50);
+                const next = document.getElementById(viewId);
+                if (next) {
+                    next.classList.remove('view-hidden');
+                    next.classList.add('view-active');
+                }
+            }
+
+            scrollToBottom() {
+                const stream = document.getElementById('student-stream');
+                if (stream) {
+                    stream.scrollTo({
+                        top: stream.scrollHeight,
+                        behavior: 'smooth'
+                    });
+                }
             }
 
             registerServiceWorker() {
@@ -1489,8 +1619,8 @@ Return JSON ONLY. No extra keys. No commentary.
                 const modal = document.getElementById(`modal-${type}`);
                 if (!modal) return;
 
-                const bd = document.getElementById(`${type === 'history' ? 'history' : type === 'install' ? 'install' : 'modal'}-backdrop`);
-                const panel = document.getElementById(`${type === 'history' ? 'history' : type === 'install' ? 'install' : 'modal'}-panel`);
+                const bd = document.getElementById(`${['history', 'install', 'permissions', 'screenshare'].includes(type) ? type : 'modal'}-backdrop`);
+                const panel = document.getElementById(`${['history', 'install', 'permissions', 'screenshare'].includes(type) ? type : 'modal'}-panel`);
 
                 if (!bd || !panel) return;
 
@@ -2242,19 +2372,39 @@ Return JSON ONLY. No extra keys. No commentary.
                     this.state.isMicActive = false;
                     this.updateMicUI(false);
                 } else {
-                    // START
+                    // If System Audio, show confirmation modal first
+                    if (this.state.audioSource === 'system') {
+                        this.toggleModal('screenshare', true);
+                        return;
+                    }
+
+                    // START (Regular Mic)
                     try {
                         await this.startDeepgram();
                         this.state.isMicActive = true;
                         this.updateMicUI(true);
-                        const msg = this.state.audioSource === 'system' ? "Broadcasting System Audio" : "Broadcasting Microphone";
-                        this.showToast(msg, "success");
+                        this.showToast("Broadcasting Microphone", "success");
                     } catch (e) {
                         console.error("Mic Error", e);
-                        this.showToast("Broadcast Error: " + e.message, "error");
-                        this.state.isMicActive = false;
-                        this.updateMicUI(false);
+                        this.showToast(e.message || "Could not start microphone", "error");
+                        this.state.isMicActive = false; // Ensure UI is reset on error
+                        this.updateMicUI(false); // Ensure UI is reset on error
                     }
+                }
+            }
+
+            async handleScreenShareConfirm() {
+                this.toggleModal('screenshare', false);
+                try {
+                    await this.startDeepgram();
+                    this.state.isMicActive = true;
+                    this.updateMicUI(true);
+                    this.showToast("Broadcasting System Audio", "success");
+                } catch (e) {
+                    console.error("System Audio Error", e);
+                    this.showToast(e.message || "Screen share failed", "error");
+                    this.state.isMicActive = false;
+                    this.updateMicUI(false);
                 }
             }
 
