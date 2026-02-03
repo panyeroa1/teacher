@@ -115,10 +115,46 @@
             -webkit-backdrop-filter: var(--glass-blur);
             border: 1px solid var(--glass-border);
         }
+
+        /* Install Banner */
+        .install-banner {
+            background: linear-gradient(135deg, #3b82f6 0%, #1d4ed8 100%);
+            animation: slideDown 0.4s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+        }
+
+        @keyframes slideDown {
+            0% { transform: translateY(-100%); opacity: 0; }
+            100% { transform: translateY(0); opacity: 1; }
+        }
+
+        .install-banner.hidden {
+            display: none;
+        }
     </style>
 </head>
 
 <body class="antialiased text-gray-800">
+
+    <!-- Install App Banner (hidden by default, shown only when app can be installed) -->
+    <div id="install-banner" class="install-banner hidden fixed top-0 left-0 right-0 z-50 px-4 py-3 shadow-lg">
+        <div class="max-w-lg mx-auto flex items-center justify-between gap-3">
+            <div class="flex items-center gap-3">
+                <img src="pwa_icon.png" alt="Succes" class="w-10 h-10 rounded-lg shadow-md">
+                <div class="text-white">
+                    <p class="font-semibold text-sm">Install Succes</p>
+                    <p class="text-xs text-white/70">Add to home screen</p>
+                </div>
+            </div>
+            <div class="flex items-center gap-2">
+                <button onclick="Auth.dismissInstall()" class="text-white/70 hover:text-white px-2 py-1 text-sm">
+                    <i class="fa-solid fa-xmark"></i>
+                </button>
+                <button onclick="Auth.installApp()" class="bg-white text-blue-600 font-semibold px-4 py-2 rounded-lg text-sm shadow-md hover:bg-blue-50 transition-all">
+                    Install
+                </button>
+            </div>
+        </div>
+    </div>
 
     <!-- Toast Container -->
     <div id="toast-container"
@@ -438,8 +474,13 @@
         ];
 
         // --- AUTH CONTROLLER ---
+        // PWA Install prompt
+        let deferredPrompt = null;
+
         const Auth = {
             init() {
+                // Check if app is already installed
+                this.checkInstallState();
                 // Populate language selects
                 const ops = LANGUAGES.map(l => `<option value="${l.code}" ${l.code === 'nl-BE' ? 'selected' : ''}>${l.flag || ''} ${l.name}</option>`).join('');
                 document.getElementById('login-lang').innerHTML = ops;
@@ -551,6 +592,59 @@
                 setTimeout(() => {
                     window.location.href = 'index.html';
                 }, 500);
+            },
+
+            // Check if PWA is installed and show/hide banner
+            checkInstallState() {
+                const banner = document.getElementById('install-banner');
+                
+                // Check if running as installed PWA
+                const isStandalone = window.matchMedia('(display-mode: standalone)').matches ||
+                                     window.navigator.standalone === true ||
+                                     document.referrer.includes('android-app://') ||
+                                     localStorage.getItem('pwa_installed') === 'true';
+                
+                if (isStandalone) {
+                    banner.classList.add('hidden');
+                    return;
+                }
+
+                // Listen for install prompt
+                window.addEventListener('beforeinstallprompt', (e) => {
+                    e.preventDefault();
+                    deferredPrompt = e;
+                    banner.classList.remove('hidden');
+                });
+
+                // Listen for successful install
+                window.addEventListener('appinstalled', () => {
+                    banner.classList.add('hidden');
+                    deferredPrompt = null;
+                    localStorage.setItem('pwa_installed', 'true');
+                    this.showToast('App installed successfully!', 'success');
+                });
+            },
+
+            async installApp() {
+                if (!deferredPrompt) {
+                    this.showToast('Install not available', 'error');
+                    return;
+                }
+
+                deferredPrompt.prompt();
+                const { outcome } = await deferredPrompt.userChoice;
+                
+                if (outcome === 'accepted') {
+                    localStorage.setItem('pwa_installed', 'true');
+                }
+                deferredPrompt = null;
+            },
+
+            dismissInstall() {
+                const banner = document.getElementById('install-banner');
+                banner.classList.add('hidden');
+                // Remember dismissal for this session
+                sessionStorage.setItem('install_dismissed', 'true');
             }
         };
 
