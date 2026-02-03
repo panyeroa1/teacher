@@ -1649,8 +1649,12 @@
                         body: JSON.stringify({
                             "model_id": "sonic-3-latest",
                             "transcript": transcript,
-                            "voice": { "mode": "id", "id": voiceId, ...(CREDENTIALS.CARTESIA_PDICT[lang] ? { "__experimental_pronunciation_dictionary": { "id": CREDENTIALS.CARTESIA_PDICT[lang] } } : {}) },
-                            "output_format": { "container": "wav", "encoding": "pcm_f32le", "sample_rate": 44100 }
+                            "voice": { "mode": "id", "id": voiceId },
+                            "output_format": { "container": "wav", "encoding": "pcm_f32le", "sample_rate": 44100 },
+                            "language": baseLang,
+                            "speed": "normal",
+                            ...(CREDENTIALS.CARTESIA_PDICT[lang] ? { "pronunciation_dict_id": CREDENTIALS.CARTESIA_PDICT[lang] } : {}),
+                            "generation_config": { "speed": 1, "volume": 1 }
                         })
                     });
 
